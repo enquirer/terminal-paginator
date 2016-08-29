@@ -2,11 +2,11 @@
   "name": "terminal-paginator",
   "description": "Paginator used for rendering lists or choices for prompts in the terminal.",
   "version": "0.1.0",
-  "homepage": "https://github.com/jonschlinkert/terminal-paginator",
+  "homepage": "https://github.com/enquirer/terminal-paginator",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
-  "repository": "jonschlinkert/terminal-paginator",
+  "repository": "enquirer/terminal-paginator",
   "bugs": {
-    "url": "https://github.com/jonschlinkert/terminal-paginator/issues"
+    "url": "https://github.com/enquirer/terminal-paginator/issues"
   },
   "license": "MIT",
   "files": [
@@ -21,11 +21,63 @@
     "test": "mocha"
   },
   "keywords": [
-    "paginator",
-    "terminal"
+    "answer",
+    "answers",
+    "ask",
+    "checkbox",
+    "choice",
+    "choices",
+    "cli",
+    "command",
+    "enquirer",
+    "enquirerprompt",
+    "input",
+    "inquire",
+    "inquirer",
+    "interact",
+    "list",
+    "menu",
+    "password",
+    "prompt",
+    "prompts",
+    "question",
+    "readline",
+    "stdin",
+    "stdout",
+    "terminal",
+    "tty",
+    "ui"
   ],
   "dependencies": {
     "arr-flatten": "^1.0.1",
     "log-utils": "^0.2.1"
+  },
+  "devDependencies": {
+    "gulp-format-md": "^0.1.10"
+  },
+  "verb": {
+    "toc": false,
+    "layout": "default",
+    "tasks": [
+      "readme"
+    ],
+    "plugins": [
+      "gulp-format-md"
+    ],
+    "related": {
+      "list": [
+        "enquirer",
+        "prompt-choices",
+        "choices-separator",
+        "readline-utils"
+      ]
+    },
+    "reflinks": [
+      "verb",
+      "verb-generate-readme"
+    ],
+    "lint": {
+      "reflinks": true
+    }
   }
 }
