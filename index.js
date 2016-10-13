@@ -20,7 +20,7 @@ Paginator.prototype.paginate = function(output, selected, pageSize) {
   var m = output.match(/^\n+/);
   var prefix = m ? m[0] : '';
 
-  output = output.replace(/^\n+/, '');
+  output = output.replace(/^\n{2,}/, '\n');
   pageSize = pageSize || this.options.pageSize || 7;
   var lines = output.split('\n');
 
