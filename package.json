@@ -10,8 +10,7 @@
   },
   "license": "MIT",
   "files": [
-    "index.js",
-    "LICENSE"
+    "index.js"
   ],
   "main": "index.js",
   "engines": {
@@ -19,6 +18,13 @@
   },
   "scripts": {
     "test": "mocha"
+  },
+  "dependencies": {
+    "debug": "^2.2.0",
+    "log-utils": "^0.2.1"
+  },
+  "devDependencies": {
+    "gulp-format-md": "^0.1.10"
   },
   "keywords": [
     "answer",
@@ -37,6 +43,7 @@
     "interact",
     "list",
     "menu",
+    "paginator",
     "password",
     "prompt",
     "prompts",
@@ -48,13 +55,6 @@
     "tty",
     "ui"
   ],
-  "dependencies": {
-    "debug": "^2.2.0",
-    "log-utils": "^0.2.1"
-  },
-  "devDependencies": {
-    "gulp-format-md": "^0.1.10"
-  },
   "verb": {
     "toc": false,
     "layout": "default",
@@ -66,9 +66,9 @@
     ],
     "related": {
       "list": [
+        "choices-separator",
         "enquirer",
         "prompt-choices",
-        "choices-separator",
         "readline-utils"
       ]
     },
