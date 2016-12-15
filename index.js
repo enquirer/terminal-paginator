@@ -21,7 +21,7 @@ Paginator.prototype.paginate = function(output, selected, pageSize) {
   var prefix = m ? m[0] : '';
 
   output = output.replace(/^\n{2,}/, '\n');
-  pageSize = pageSize || this.options.pageSize || 7;
+  pageSize = pageSize || this.options.pageSize || 10;
   var lines = output.split('\n');
 
   // return if there are not enough lines to paginate
