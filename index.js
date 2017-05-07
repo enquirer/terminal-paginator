@@ -16,34 +16,44 @@ function Paginator(options) {
   this.pointer = 0;
 }
 
-Paginator.prototype.paginate = function(output, selected, pageSize) {
-  var m = output.match(/^\n+/);
-  var prefix = m ? m[0] : '';
-
-  output = output.replace(/^\n{2,}/, '\n');
-  pageSize = pageSize || this.options.pageSize || 10;
+Paginator.prototype.paginate = function(output, selected, limit) {
+  limit = limit || this.options.limit || 7;
   var lines = output.split('\n');
 
-  // return if there are not enough lines to paginate
-  if (pageSize >= lines.length - 2) {
+  // Return if we don't have enough visible lines to paginate
+  if (lines.length <= limit) {
     return output;
   }
 
-  // Move the pointer when a down keypress is entered, and limit it to 3
-  if (this.pointer < 3 && this.lastIndex < selected && (selected - this.lastIndex) < 9) {
-    this.pointer = Math.min(3, this.pointer + selected - this.lastIndex);
+  // get the approximate "middle" of the visible list
+  var middle = Math.ceil(limit / 2);
+
+  // Move the pointer when a down keypress is entered, and limit it
+  // approximately half the length of the limit, to keep the pointer
+  // the middle of the visible list
+  if (this.pointer < middle && this.lastIndex < selected && selected - this.lastIndex < limit) {
+    this.pointer = Math.min(middle, this.pointer + selected - this.lastIndex);
   }
 
+  // store reference to the index of the currently selected item
   this.lastIndex = selected;
 
-  // Duplicate the lines so it give an infinite list look
-  var infinite = lines.concat(lines).concat(lines);
+  // Duplicate lines to create the illusion of an infinite list
+  var infinite = lines.concat(lines).concat(lines).filter(Boolean);
   var topIndex = Math.max(0, selected + lines.length - this.pointer);
 
-  var section = infinite.splice(topIndex, pageSize).join('\n');
-  section += '\n';
-  section += log.dim('(Move up and down to reveal more choices)');
-  return prefix + section;
+  // Create the visible list based on the limit and current cursor position
+  var visible = infinite.splice(topIndex, limit).join('\n');
+  visible += '\n';
+  visible += log.dim('(Move up and down to reveal more choices)');
+
+  // ensure that output has a leading newline, so that the first
+  // list item begins on the next line after the prompt question
+  if (visible.charAt(0) !== '\n') {
+    visible = '\n' + visible;
+  }
+
+  return visible;
 };
 
 /**
