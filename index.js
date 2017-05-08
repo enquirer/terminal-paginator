@@ -12,6 +12,7 @@ var log = require('log-utils');
 function Paginator(options) {
   debug('initializing from <%s>', __filename);
   this.options = options || {};
+  this.firstRender = true;
   this.lastIndex = 0;
   this.pointer = 0;
 }
@@ -28,9 +29,9 @@ Paginator.prototype.paginate = function(output, selected, limit) {
   // get the approximate "middle" of the visible list
   var middle = Math.ceil(limit / 2);
 
-  // Move the pointer when a down keypress is entered, and limit it
-  // approximately half the length of the limit, to keep the pointer
-  // the middle of the visible list
+  // Move the pointer when a down keypress is entered, and limit
+  // it to approximately half the length of the limit to keep the
+  // pointer the middle of the visible list
   if (this.pointer < middle && this.lastIndex < selected && selected - this.lastIndex < limit) {
     this.pointer = Math.min(middle, this.pointer + selected - this.lastIndex);
   }
@@ -41,6 +42,14 @@ Paginator.prototype.paginate = function(output, selected, limit) {
   // Duplicate lines to create the illusion of an infinite list
   var infinite = lines.concat(lines).concat(lines).filter(Boolean);
   var topIndex = Math.max(0, selected + lines.length - this.pointer);
+
+  if (this.options.radio === true && this.firstRender) {
+    this.firstRender = false;
+    topIndex = 0;
+    if (!infinite[0].trim()) {
+      topIndex++;
+    }
+  }
 
   // Create the visible list based on the limit and current cursor position
   var visible = infinite.splice(topIndex, limit).join('\n');
