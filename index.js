@@ -27,7 +27,7 @@ Paginator.prototype.paginate = function(output, selected, limit) {
   }
 
   // get the approximate "middle" of the visible list
-  var middle = Math.ceil(limit / 2);
+  var middle = Math.floor(limit / 2);
 
   // Move the pointer when a down keypress is entered, and limit
   // it to approximately half the length of the limit to keep the
