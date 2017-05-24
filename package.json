@@ -1,7 +1,7 @@
 {
   "name": "terminal-paginator",
   "description": "Paginator used for rendering lists or choices for prompts in the terminal.",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "homepage": "https://github.com/enquirer/terminal-paginator",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "enquirer/terminal-paginator",
