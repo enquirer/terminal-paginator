@@ -1,6 +1,7 @@
 'use strict';
 
 var debug = require('debug')('terminal-paginator');
+var extend = require('extend-shallow');
 var log = require('log-utils');
 
 /**
@@ -18,9 +19,20 @@ function Paginator(options) {
   this.position = 0;
 }
 
-Paginator.prototype.paginate = function(output, selected, limit) {
-  limit = limit || this.options.limit || 7;
+/**
+ * Paginate the given `output` string and update the cursor position.
+ *
+ * @param {String} `output`
+ * @param {Number} `pos`
+ * @param {Object} `options`
+ * @return {String}
+ * @api public
+ */
+
+Paginator.prototype.paginate = function(output, pos, options) {
+  var opts = extend({limit: 7}, this.options, options);
   var lines = output.split('\n');
+  var limit = opts.limit;
 
   // Return if we don't have enough visible lines to paginate
   if (lines.length <= limit) {
@@ -33,29 +45,28 @@ Paginator.prototype.paginate = function(output, selected, limit) {
   // Move the position when a down keypress is entered, and limit
   // it to approximately half the length of the limit to keep the
   // position the middle of the visible list
-  if (this.position < middle && this.lastIndex < selected && selected - this.lastIndex < limit) {
-    this.position = Math.min(middle, this.position + selected - this.lastIndex);
+  if (this.position < middle && this.lastIndex < pos && pos - this.lastIndex < limit) {
+    this.position = Math.min(middle, this.position + pos - this.lastIndex);
   }
 
-  // store reference to the index of the currently selected item
-  this.lastIndex = selected;
+  // store reference to the index of the currently pos item
+  this.lastIndex = pos;
+  if (opts.filterList === true) {
+    lines = lines.filter(Boolean);
+  }
 
   // Duplicate lines to create the illusion of an infinite list
-  var infinite = lines.concat(lines).concat(lines).filter(Boolean);
-  var topIndex = Math.max(0, selected + lines.length - this.position);
-
-  if (this.options.radio === true && this.firstRender) {
-    this.firstRender = false;
-    topIndex = 0;
-    if (!infinite[0].trim()) {
-      topIndex++;
-    }
-  }
+  var infinite = lines.concat(lines).concat(lines);
+  var topIndex = Math.max(0, pos + lines.length - this.position);
 
   // Create the visible list based on the limit and current cursor position
-  var visible = infinite.splice(topIndex, limit).join('\n');
-  visible += '\n';
-  visible += log.dim(this.footer);
+  var visible = infinite.splice(topIndex, limit);
+  visible = visible.join('\n');
+
+  if (this.footer) {
+    visible += '\n';
+    visible += log.dim(this.footer);
+  }
 
   // ensure that output has a leading newline, so that the first
   // list item begins on the next line after the prompt question
