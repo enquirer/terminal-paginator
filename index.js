@@ -13,7 +13,10 @@ var log = require('log-utils');
 function Paginator(options) {
   debug('initializing from <%s>', __filename);
   this.options = options || {};
-  this.footer = this.options.footer || '(Move up and down to reveal more choices)';
+  this.footer = this.options.footer;
+  if (typeof this.footer !== 'string') {
+    this.footer = '(Move up and down to reveal more choices)';
+  }
   this.firstRender = true;
   this.lastIndex = 0;
   this.position = 0;
@@ -35,7 +38,7 @@ Paginator.prototype.paginate = function(output, pos, options) {
   var limit = opts.limit;
 
   // Return if we don't have enough visible lines to paginate
-  if (lines.length <= limit) {
+  if (lines.length <= limit || opts.paginate === false) {
     return output;
   }
 
@@ -51,18 +54,17 @@ Paginator.prototype.paginate = function(output, pos, options) {
 
   // store reference to the index of the currently pos item
   this.lastIndex = pos;
-  if (opts.filterList === true) {
-    lines = lines.filter(Boolean);
-  }
 
   // Duplicate lines to create the illusion of an infinite list
   var infinite = lines.concat(lines).concat(lines);
+  if (opts.filterList !== false) {
+    infinite = infinite.filter(Boolean);
+  }
+
   var topIndex = Math.max(0, pos + lines.length - this.position);
 
   // Create the visible list based on the limit and current cursor position
-  var visible = infinite.splice(topIndex, limit);
-  visible = visible.join('\n');
-
+  var visible = infinite.splice(topIndex, limit).join('\n');
   if (this.footer) {
     visible += '\n';
     visible += log.dim(this.footer);
