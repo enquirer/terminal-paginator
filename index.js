@@ -61,7 +61,7 @@ Paginator.prototype.paginate = function(output, pos, options) {
     infinite = infinite.filter(Boolean);
   }
 
-  var topIndex = Math.max(0, pos + lines.length - this.position);
+  var topIndex = Math.max(0, pos + lines.length - this.position - 1);
 
   // Create the visible list based on the limit and current cursor position
   var visible = infinite.splice(topIndex, limit).join('\n');
